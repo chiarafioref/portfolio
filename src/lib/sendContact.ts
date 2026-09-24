@@ -22,7 +22,8 @@ export async function sendContact(payload: ContactPayload): Promise<void> {
     return
   }
 
-  const endpoint = import.meta.env.VITE_CONTACT_ENDPOINT ?? '/api/contact'
+  // || e non ??: anche una variabile definita ma vuota ricade sull'endpoint predefinito.
+  const endpoint = import.meta.env.VITE_CONTACT_ENDPOINT || '/api/contact'
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
 
