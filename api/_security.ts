@@ -8,15 +8,19 @@ export const header = (headers: Headers, name: string): string => {
   return (Array.isArray(value) ? value[0] : value) ?? ''
 }
 
-/** Ammette il dominio Vercel, quelli in ALLOWED_ORIGINS e, fuori dalla produzione, localhost. */
+/**
+ * Ammette il dominio di produzione, gli indirizzi del deploy corrente (univoco e di branch, forniti da Vercel),
+ * quelli in ALLOWED_ORIGINS e, fuori dalla produzione, localhost.
+ */
 export function isAllowedOrigin(origin: string, env: Env): boolean {
   const allowed = new Set<string>()
   for (const entry of (env.ALLOWED_ORIGINS ?? '').split(',')) {
     const value = entry.trim().replace(/\/$/, '')
     if (value) allowed.add(value)
   }
-  if (env.VERCEL_PROJECT_PRODUCTION_URL) allowed.add(`https://${env.VERCEL_PROJECT_PRODUCTION_URL}`)
-  if (env.VERCEL_ENV !== 'production' && env.VERCEL_URL) allowed.add(`https://${env.VERCEL_URL}`)
+  for (const host of [env.VERCEL_PROJECT_PRODUCTION_URL, env.VERCEL_URL, env.VERCEL_BRANCH_URL]) {
+    if (host) allowed.add(`https://${host}`)
+  }
   if (allowed.has(origin)) return true
   return env.VERCEL_ENV !== 'production' && /^http:\/\/localhost:\d{2,5}$/.test(origin)
 }

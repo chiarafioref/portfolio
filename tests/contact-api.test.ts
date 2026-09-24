@@ -83,6 +83,14 @@ describe('api/contact', () => {
     expect(fetchMock).not.toHaveBeenCalled()
   })
 
+  it('accetta gli indirizzi Vercel del deploy corrente anche in produzione', async () => {
+    vi.stubEnv('VERCEL_URL', 'chiarafiore-abc123.vercel.app')
+    vi.stubEnv('VERCEL_BRANCH_URL', 'chiarafiore-git-main.vercel.app')
+    expect((await call({ origin: 'https://chiarafiore-abc123.vercel.app' })).statusCode).toBe(200)
+    expect((await call({ origin: 'https://chiarafiore-git-main.vercel.app' })).statusCode).toBe(200)
+    expect((await call({ origin: 'https://altro-progetto.vercel.app' })).statusCode).toBe(403)
+  })
+
   it('non accetta localhost in produzione', async () => {
     expect((await call({ origin: 'http://localhost:5173' })).statusCode).toBe(403)
   })
