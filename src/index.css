@@ -1,0 +1,467 @@
+@import "tailwindcss";
+
+/* Il tema è deciso da <html data-theme="light|dark"> (vedi index.html e ThemeToggle). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ── Design tokens ───────────────────────────────────────────────────────── */
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --fg: #0b1220;
+  --muted: #475569; /* 7.2:1 su --bg */
+  --surface: rgb(255 255 255 / 0.72);
+  --line: rgb(15 23 42 / 0.11);
+  --accent: #0369a1; /* 5.7:1 su --bg */
+  --accent-2: #6d28d9;
+  --glow: rgb(3 105 161 / 0.32);
+  --aurora-1: rgb(14 165 233 / 0.22);
+  --aurora-2: rgb(139 92 246 / 0.18);
+  --aurora-3: rgb(20 184 166 / 0.14);
+  --phone: #0e1220;
+  --phone-edge: #2a3145;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #060810;
+  --fg: #eaf0fb;
+  --muted: #9aa8bd; /* 8:1 su --bg */
+  --surface: rgb(255 255 255 / 0.045);
+  --line: rgb(255 255 255 / 0.1);
+  --accent: #38bdf8;
+  --accent-2: #a78bfa;
+  --glow: rgb(56 189 248 / 0.4);
+  --aurora-1: rgb(56 189 248 / 0.2);
+  --aurora-2: rgb(139 92 246 / 0.22);
+  --aurora-3: rgb(45 212 191 / 0.12);
+  --phone: #04050a;
+  --phone-edge: #39415a;
+}
+
+/* Espone i token come utility Tailwind: bg-bg, text-fg, text-muted, border-line, bg-surface, text-accent… */
+@theme inline {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+
+  --animate-shimmer: shimmer 8s linear infinite;
+  --animate-marquee: marquee 45s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 45s linear infinite;
+  --animate-glow-breathe: glow-breathe 7s ease-in-out infinite;
+  --animate-drift-a: drift-a 28s ease-in-out infinite alternate;
+  --animate-drift-b: drift-b 34s ease-in-out infinite alternate;
+  --animate-drift-c: drift-c 40s ease-in-out infinite alternate;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-ping-soft: ping-soft 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-ping-ring: ping-ring 3.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* ── Keyframes (solo transform/opacity/background-position: GPU friendly) ── */
+@keyframes shimmer {
+  to { background-position: 200% center; }
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+@keyframes marquee-reverse {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+@keyframes glow-breathe {
+  0%, 100% { transform: scale(0.94); opacity: 0.75; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+@keyframes drift-a {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(12vw, 8vh, 0) scale(1.15); }
+}
+@keyframes drift-b {
+  from { transform: translate3d(0, 0, 0) scale(1.1); }
+  to { transform: translate3d(-10vw, -10vh, 0) scale(0.95); }
+}
+@keyframes drift-c {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(-8vw, 12vh, 0) scale(1.2); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes ping-ring {
+  0% { transform: scale(1); opacity: 0.7; }
+  80%, 100% { transform: scale(1.7); opacity: 0; }
+}
+@keyframes ping-soft {
+  75%, 100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    /* Colore esplicito anche sulla radice: Safari (iPhone) lo usa per l'overscroll e per le barre di sistema.
+       Se fosse trasparente, comparirebbero bande bianche in alto e in basso. */
+    background-color: var(--bg);
+  }
+
+  body {
+    /* Niente sfondo sul body: il colore sta su html, così lo sfondo animato (z-index negativo) resta visibile sopra di esso. */
+    @apply font-sans text-fg antialiased;
+    min-height: 100dvh;
+    /* Nessuno scorrimento orizzontale: gli elementi decorativi che sbordano di un pixel vengono tagliati. */
+    overflow-x: clip;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    /* Plus Jakarta Sans ha spazi stretti: con tracking negativo le parole si "attaccano" */
+    word-spacing: 0.06em;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--accent) 30%, transparent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  main:focus {
+    outline: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* Griglia sottile usata nello sfondo. */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* ── Border beam: bordo luminoso che ruota, visibile in hover (usato da TiltCard) ── */
+@property --beam-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes beam-spin {
+  to { --beam-angle: 360deg; }
+}
+.border-beam::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: conic-gradient(from var(--beam-angle), transparent 0 55%, var(--accent) 78%, var(--accent-2) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  animation: beam-spin 3.5s linear infinite;
+}
+.border-beam:hover::before,
+.border-beam:focus-within::before {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .border-beam::before { animation: none; }
+}
+
+/* ── Cambio tema con rivelazione circolare (View Transitions API) ── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 2; }
+
+/* ── Portfolio: telefoni con le schermate dei progetti ───────────────────────
+   Tutte le misure derivano da --pw (larghezza del telefono, in cqw del palco): cornice, raggi
+   e barra di stato scalano insieme, senza JavaScript. Le variabili --mx/--my (parallasse)
+   le aggiorna PhoneStage.tsx al movimento del mouse. */
+.phone-stage {
+  container-type: inline-size;
+  position: relative;
+  width: 100%;
+  max-width: 38rem;
+  margin-inline: auto;
+  aspect-ratio: 1 / 1.1;
+  perspective: 1400px;
+  --mx: 0;
+  --my: 0;
+}
+.phone-halo {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  width: 86%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--accent) 34%, transparent),
+    color-mix(in oklab, var(--accent-2) 14%, transparent) 60%,
+    transparent
+  );
+  filter: blur(6px);
+  animation: phone-breathe 7s ease-in-out infinite;
+}
+.ph-pos {
+  position: absolute;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.ph-center {
+  --pw: 46cqw;
+  left: 27cqw;
+  top: 0;
+  width: var(--pw);
+  z-index: 3;
+  transform: translate3d(calc(var(--mx) * 10px), calc(var(--my) * 8px), 0) rotateY(calc(var(--mx) * 5deg))
+    rotateX(calc(var(--my) * -3deg));
+}
+.ph-left {
+  --pw: 37cqw;
+  left: 1cqw;
+  top: 9cqw;
+  width: var(--pw);
+  z-index: 1;
+  transform: translate3d(calc(var(--mx) * -6px), calc(var(--my) * 4px), 0) rotate(-7deg) rotateY(14deg);
+}
+.ph-right {
+  --pw: 37cqw;
+  right: 1cqw;
+  top: 9cqw;
+  width: var(--pw);
+  z-index: 2;
+  transform: translate3d(calc(var(--mx) * -14px), calc(var(--my) * 4px), 0) rotate(7deg) rotateY(-14deg);
+}
+.ph-float {
+  animation: phone-float 7s ease-in-out infinite;
+}
+.ph-left .ph-float {
+  animation-duration: 8.5s;
+  animation-delay: -2s;
+}
+.ph-right .ph-float {
+  animation-duration: 9.5s;
+  animation-delay: -4s;
+}
+.ph-entry {
+  animation: phone-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.ph-left .ph-entry {
+  animation-delay: 0.15s;
+}
+.ph-right .ph-entry {
+  animation-delay: 0.3s;
+}
+.ph-left .phone,
+.ph-right .phone {
+  filter: saturate(0.9) brightness(0.96);
+}
+@keyframes phone-breathe {
+  0%, 100% { opacity: 0.7; scale: 0.94; }
+  50% { opacity: 1; scale: 1.06; }
+}
+@keyframes phone-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -1.4cqw; }
+}
+@keyframes phone-rise {
+  from { transform: translateY(28px); }
+  to { transform: none; }
+}
+
+.phone {
+  position: relative;
+  width: 100%;
+  padding: calc(var(--pw) * 0.03);
+  border-radius: calc(var(--pw) * 0.16);
+  background: linear-gradient(160deg, var(--phone-edge), var(--phone) 38%);
+  box-shadow:
+    0 30px 60px -20px rgb(0 0 0 / 0.65),
+    0 0 0 1px rgb(255 255 255 / 0.08) inset,
+    0 0 0 1px rgb(0 0 0 / 0.4);
+}
+/* tasti laterali */
+.phone::before,
+.phone::after {
+  content: "";
+  position: absolute;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--phone-edge);
+}
+.phone::before { left: -3px; top: 18%; height: 7%; }
+.phone::after { right: -3px; top: 26%; height: 12%; }
+.phone-screen {
+  position: relative;
+  aspect-ratio: 375 / 812;
+  border-radius: calc(var(--pw) * 0.125);
+  overflow: hidden;
+  background: #f4f5fb;
+  isolation: isolate;
+}
+.phone-island {
+  position: absolute;
+  z-index: 6;
+  left: 50%;
+  top: 1.6%;
+  translate: -50% 0;
+  width: 27%;
+  height: 3.2%;
+  border-radius: 99px;
+  background: #05060a;
+}
+.phone-glare {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  background: linear-gradient(115deg, rgb(255 255 255 / 0.15) 0, rgb(255 255 255 / 0) 32%);
+}
+.phone-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateY(10px) scale(0.985);
+  transition:
+    opacity 0.45s ease,
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.phone-slide.is-on {
+  opacity: 1;
+  transform: none;
+}
+.phone-shot {
+  position: absolute;
+  inset: 0;
+}
+.phone-shot img {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 780 / 1612;
+  display: block;
+  user-select: none;
+}
+/* barra di stato: 5% dell'altezza in alto, l'immagine parte subito sotto */
+.phone-sb {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 5%;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 9%;
+  font-weight: 600;
+  font-size: calc(var(--pw) * 0.038);
+}
+.phone-bat {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.phone-bat i {
+  display: block;
+  width: calc(var(--pw) * 0.07);
+  height: calc(var(--pw) * 0.035);
+  border-radius: 2px;
+  background: currentColor;
+}
+.phone-bat i + i {
+  width: calc(var(--pw) * 0.016);
+  height: calc(var(--pw) * 0.026);
+  opacity: 0.5;
+}
+@media (prefers-reduced-motion: reduce) {
+  .phone-halo, .ph-float, .ph-entry { animation: none; }
+  .ph-pos, .phone-slide { transition: none; }
+}
+
+/* ── Contatti: campi, errori e conferma ─────────────────────────────────────── */
+
+/* Campo in focus: bordo con lo stesso gradiente dei bottoni e un alone morbido. */
+.field-glow {
+  position: relative;
+  border-radius: 0.75rem;
+  transition: box-shadow 0.35s ease;
+}
+.field-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.field-glow:focus-within {
+  box-shadow: 0 12px 36px -16px var(--glow);
+}
+.field-glow:focus-within::before {
+  opacity: 1;
+}
+/* Se il campo è in errore resta il bordo rosso, senza il gradiente. */
+.field-glow:has([aria-invalid="true"])::before {
+  opacity: 0;
+}
+.field-glow:has([aria-invalid="true"]):focus-within {
+  box-shadow: 0 12px 36px -18px rgb(220 38 38 / 0.5);
+}
+
+@keyframes error-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.error-in {
+  animation: error-in 0.28s ease-out both;
+}
+
+/* Spunta della conferma: cerchio e segno che si "disegnano". */
+@keyframes draw-stroke {
+  to { stroke-dashoffset: 0; }
+}
+.draw-circle {
+  stroke-dasharray: 63;
+  stroke-dashoffset: 63;
+  animation: draw-stroke 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
+}
+.draw-check {
+  stroke-dasharray: 16;
+  stroke-dashoffset: 16;
+  animation: draw-stroke 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.75s forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .error-in { animation: none; }
+  .draw-circle, .draw-check { animation: none; stroke-dashoffset: 0; }
+}

@@ -11,8 +11,12 @@ node_modules
 dist
 dist-ssr
 *.local
+.vercel
 
-public
+# Variabili d'ambiente: si pubblica solo il modello
+.env
+.env.*
+!.env.example
 
 # Editor directories and files
 .vscode/*
@@ -24,5 +28,3 @@ public
 *.njsproj
 *.sln
 *.sw?
-*.env
-src/assets/me.jpeg

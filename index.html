@@ -1,13 +1,60 @@
 <!doctype html>
-<html lang="en">
+<html lang="it" data-theme="light">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>personal-vcard-template-html</title>
+
+    <title>Chiara Fiore | Junior Full-Stack Developer</title>
+    <meta
+      name="description"
+      content="Chiara Fiore, Junior Full-Stack Developer. Applicazioni web full-stack con React, Node.js, Express e Supabase, e modelli linguistici integrati nel prodotto. Master in AI Web Development (Boolean)."
+    />
+    <meta name="author" content="Chiara Fiore" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f7f8fb" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="it_IT" />
+    <meta property="og:site_name" content="Chiara Fiore" />
+    <meta property="og:title" content="Chiara Fiore | Junior Full-Stack Developer" />
+    <meta
+      property="og:description"
+      content="Interfacce web moderne, veloci e accessibili, potenziate dall'intelligenza artificiale."
+    />
+    <meta name="twitter:card" content="summary" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Chiara Fiore",
+        "jobTitle": "Junior Full-Stack Developer",
+        "address": { "@type": "PostalAddress", "addressLocality": "Milano", "addressCountry": "IT" },
+        "sameAs": [
+          "https://github.com/chiarafioref",
+          "https://www.linkedin.com/in/chiara-fioref"
+        ]
+      }
+    </script>
+
+    <!-- Applica lingua e tema salvato prima del primo paint, per evitare il flash del tema sbagliato.
+         Se modifichi questo script, aggiorna il suo hash sha256 nella Content-Security-Policy di vercel.json. -->
+    <script>
+      (function () {
+        var p = location.pathname
+        if (p === '/en' || p.indexOf('/en/') === 0) document.documentElement.lang = 'en'
+        try {
+          var t = localStorage.getItem('theme')
+          if (t !== 'dark') t = 'light'
+          document.documentElement.setAttribute('data-theme', t)
+          if (t === 'dark') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#060810')
+        } catch (e) {}
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
