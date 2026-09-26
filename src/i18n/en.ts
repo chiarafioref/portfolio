@@ -5,6 +5,9 @@ export const en: Dictionary = {
   common: {
     newTab: 'opens in a new tab',
     opensInNewTab: '(opens in a new tab)',
+    errorTitle: 'Something went wrong',
+    errorText: "The page couldn't be loaded. The site has probably been updated: reload to get the latest version.",
+    reload: 'Reload the page',
   },
 
   nav: {
