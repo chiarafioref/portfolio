@@ -1,13 +1,10 @@
 import type { Dictionary } from './it.ts'
 
-/** Testi in inglese: stessa struttura di it.ts, verificata dal tipo `Dictionary`. */
+/** English texts. Same structure as it.ts (checked by the `Dictionary` type). */
 export const en: Dictionary = {
   common: {
     newTab: 'opens in a new tab',
     opensInNewTab: '(opens in a new tab)',
-    errorTitle: 'Something went wrong',
-    errorText: "The page couldn't be loaded. The site has probably been updated: reload to get the latest version.",
-    reload: 'Reload the page',
   },
 
   nav: {
@@ -76,7 +73,7 @@ export const en: Dictionary = {
       },
       {
         title: 'Databases and Supabase',
-        text: 'Database design and management: SQL, MySQL and Supabase (PostgreSQL) connected to front end and APIs.',
+        text: 'Database design and management: SQL, MySQL and Supabase (PostgreSQL) connected to the front end and APIs.',
         tags: ['SQL', 'MySQL', 'Supabase'],
       },
       {
@@ -92,7 +89,7 @@ export const en: Dictionary = {
 
     skillsKicker: 'Technical skills',
     skillsTitle: 'My stack, from the interface to the database',
-    skillsIntro: 'The four areas I work in, all backed by the projects in my Portfolio.',
+    skillsIntro: 'The four areas I work on, all backed by the projects in my Portfolio.',
     skills: [
       {
         title: 'Front end with React',
@@ -140,7 +137,7 @@ export const en: Dictionary = {
       kicker: 'How I work with AI',
       title: 'A tool that speeds me up, not a crutch',
       intro:
-        "I know how to write effective prompts and get the most out of AI, but I don't depend on it: what I build, I understand, I review, and I can rebuild on my own.",
+        "I know how to write effective prompts and get the most out of AI, but I don't depend on it: I understand and review what I build, and I can rebuild on my own.",
       withTitle: 'With AI',
       withCaption: 'Faster, with method',
       with: [
@@ -316,6 +313,7 @@ export const en: Dictionary = {
 
     mail: {
       subject: '💼 Contact / Job opportunity',
+      // Trailing spaces are intentional: the sender keeps typing right after each colon.
       body: [
         "Hi Chiara, I saw your portfolio and I'm reaching out because ",
         '',
